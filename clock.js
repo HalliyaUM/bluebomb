@@ -1,6 +1,10 @@
 var Target = document.getElementById("clock");
 var Target_apm = document.getElementById("apm");
 var Target_temp = document.getElementById("temperature");
+var Target_video = document.getElementById("player");
+var Target_playBtn = document.getElementById("playBtn");
+Target_video.style.visibility = "hidden";
+Target_playBtn.style.visibility = "visible";
 
 function clock() {
     var time = new Date();
@@ -60,12 +64,45 @@ function getWeather(LOCATION) {
 }
 
 // music
-var tagetTitle = document.getElementById("Title");
+
+
+function playMusic() {
+  player.playVideo();
+  Target_playBtn.style.visibility = "hidden";
+
+}
+
+var targetTitle = document.getElementById("title");
 
 var tag = document.createElement('script'); 
 tag.src = "https://www.youtube.com/player_api"; 
 var firstScriptTag = document.getElementsByTagName('script')[0]; 
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag); 
+
+var id;
+
+const noEmbed = "https://noembed.com/embed?url=";
+const urlForm = "https://www.youtube.com/watch?v=";
+
+function getMusic() {
+  fetch("https://halliyaum.github.io/bluebomb/musicJson/" + "sunny.json")
+  .then(function (response) {
+    return response.json();
+  })
+  .then(function (json) {
+    numOfSongs = json.numOfSongs - 1;
+    let random = Math.floor((Math.random() * (numOfSongs - 0) + 0));
+    id = json.music[random].id;
+  }); 
+
+  fetch(noEmbed + urlForm + id)
+  .then(function (response) {
+    return response.json();
+  })
+  .then(function (json) {
+    targetTitle.innerText = json.music[random].id;
+  }); 
+}
 
 // api 코드 다운로드 후 제어관련 함수 생성. 
 var player; 
